@@ -1,9 +1,13 @@
 "use client";
 
 import React from "react";
-import { useCampaignForm } from "../hooks/useCampaignForm";
+import { useCampaignForm } from "@/features/campaign/hooks/useCampaignForm";
 import { useLockBodyScroll } from "@/shared/hooks/useLockBodyScroll";
-import { sanitizeNumericInput, formatNumericDisplay } from "@/shared/utils/formatters";
+import {
+  sanitizeNumericInput,
+  formatNumericDisplay,
+} from "@/shared/utils/formatters";
+import { PLATFORM_OPTIONS } from "@/shared/constants/options";
 
 export default function CampaignRegistrationModal() {
   const {
@@ -63,9 +67,11 @@ export default function CampaignRegistrationModal() {
               className="px-3 py-2 bg-slate-50 border border-slate-200 rounded outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800 dark:border-slate-700"
             >
               <option value="">매체 선택</option>
-              <option value="Google">Google</option>
-              <option value="Meta">Meta</option>
-              <option value="Naver">Naver</option>
+              {PLATFORM_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
             </select>
             {errors.platform && (
               <span className="text-xs text-red-500">{errors.platform}</span>
@@ -162,7 +168,7 @@ export default function CampaignRegistrationModal() {
               disabled={isSubmitting}
               className="px-4 py-2 font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition-colors disabled:opacity-50"
             >
-              {isSubmitting ? "저장중..." : "등록하기"}
+              {isSubmitting ? "저장중" : "등록하기"}
             </button>
           </div>
         </form>

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useFilterStore } from "../store/useFilterStore";
+import { useFilterStore } from "@/features/filter/store/useFilterStore";
 import { Campaign, DailyStat, NormalizedCampaign } from "@/shared/types";
 import {
   normalizePlatform,
@@ -36,7 +36,6 @@ export const useFilteredData = (
   const endDate = normalizeDate(rawEndDate);
 
   return useMemo(() => {
-
     // 1. 캠페인을 날짜 범위(Date Range) 교집합으로 필터링
     const dateFiltered = allCampaigns.filter((c) => {
       const campStart = normalizeDate(c.startDate);

@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import { Campaign, DailyStat } from "@/shared/types";
 import { useFilteredData } from "@/features/filter/hooks/useFilteredData";
-import { useMetricToggle } from "../hooks/useMetricToggle";
+import { useMetricToggle } from "@/features/dashboard/hooks/useMetricToggle";
 import { aggregateDailyStats } from "@/shared/utils/dataset";
 
 interface Props {

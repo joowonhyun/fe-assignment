@@ -1,5 +1,7 @@
-export type Platform = 'Google' | 'Meta' | 'Naver';
-export type CampaignStatus = 'active' | 'paused' | 'ended';
+import { Platform as PlatformType } from "@/shared/constants/platforms";
+
+export type Platform = PlatformType;
+export type CampaignStatus = "active" | "paused" | "ended";
 
 export interface Campaign {
   id: string;

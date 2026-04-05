@@ -1,7 +1,7 @@
 "use client";
 
 import { STATUS_OPTIONS, PLATFORM_OPTIONS } from "@/shared/constants/options";
-import { useGlobalFilter } from "../hooks/useGlobalFilter";
+import { useGlobalFilter } from "@/features/filter/hooks/useGlobalFilter";
 import DateRangePicker from "./DateRangePicker";
 import FilterToggleGroup from "./FilterToggleGroup";
 import ResetButton from "./ResetButton";

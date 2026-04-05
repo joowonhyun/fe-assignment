@@ -3,7 +3,7 @@
 import { Campaign, DailyStat } from "@/shared/types";
 import { Table } from "@/shared/components/ui/Table";
 import Pagination from "@/shared/components/ui/Pagination";
-import { useCampaignTable } from "../hooks/useCampaignTable";
+import { useCampaignTable } from "@/features/campaign/hooks/useCampaignTable";
 import { useFilteredData } from "@/features/filter/hooks/useFilteredData";
 import CampaignTableToolbar from "./CampaignTableToolbar";
 import CampaignTableHeader from "./CampaignTableHeader";

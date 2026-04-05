@@ -1,4 +1,5 @@
-import { CampaignStatus, Platform } from "../types";
+import { CampaignStatus } from "@/shared/types";
+import { PLATFORM_OPTIONS as PLATFORM_LIST } from "./platforms";
 
 export const STATUS_OPTIONS: { label: string; value: CampaignStatus }[] = [
   { label: "진행중", value: "active" },
@@ -6,8 +7,4 @@ export const STATUS_OPTIONS: { label: string; value: CampaignStatus }[] = [
   { label: "종료", value: "ended" },
 ];
 
-export const PLATFORM_OPTIONS: { label: string; value: Platform }[] = [
-  { label: "Google", value: "Google" },
-  { label: "Meta", value: "Meta" },
-  { label: "Naver", value: "Naver" },
-];
+export const PLATFORM_OPTIONS = PLATFORM_LIST;

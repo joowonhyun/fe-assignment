@@ -1,17 +1,22 @@
+import { PLATFORM_CONFIG, PLATFORM_NAMES } from "@/shared/constants/platforms";
 import {
-  Campaign,
+  Platform,
   CampaignStatus,
   DailyStat,
   NormalizedCampaign,
-  Platform,
 } from "@/shared/types";
-import { calculateCPC, calculateCTR, calculateROAS } from "./calc";
 
 export const normalizePlatform = (platform: string): Platform => {
   const lower = platform.toLowerCase();
-  if (lower.includes("facebook") || lower.includes("meta")) return "Meta";
-  if (lower.includes("naver") || lower.includes("네이버")) return "Naver";
-  return "Google";
+
+  // Find matching platform from config
+  const matched = PLATFORM_NAMES.find((key) =>
+    PLATFORM_CONFIG[key].matchKeywords.some((keyword) =>
+      lower.includes(keyword),
+    ),
+  );
+
+  return matched || PLATFORM_NAMES[0]; // 기본값 (첫 번째 플랫폼)
 };
 
 export const normalizeStatus = (status: string): CampaignStatus => {
@@ -62,55 +67,6 @@ export const getInitialDates = () => {
   };
 };
 
-export const normalizeCampaignData = (
-  campaigns: Campaign[],
-  dailyStats: DailyStat[],
-): NormalizedCampaign[] => {
-  // 캠페인 아이디를 기준으로 일별 통계 맵핑
-  const statsMap = new Map<string, DailyStat[]>();
-  dailyStats.forEach((stat) => {
-    if (!statsMap.has(stat.campaignId)) {
-      statsMap.set(stat.campaignId, []);
-    }
-    statsMap.get(stat.campaignId)!.push(stat);
-  });
-
-  return campaigns.map((c) => {
-    const stats = statsMap.get(c.id) || [];
-    let impressions = 0;
-    let clicks = 0;
-    let conversions = 0;
-    let cost = 0;
-    let conversionsValue = 0;
-
-    stats.forEach((s) => {
-      impressions += normalizeNumber(s.impressions);
-      clicks += normalizeNumber(s.clicks);
-      conversions += normalizeNumber(s.conversions);
-      cost += normalizeNumber(s.cost);
-      conversionsValue += normalizeNumber(s.conversionsValue);
-    });
-
-    return {
-      id: c.id,
-      name: c.name || `캠페인 ${c.id}`, // 캠페인명 빈값 처리
-      status: normalizeStatus(c.status),
-      platform: normalizePlatform(c.platform),
-      budget: normalizeNumber(c.budget),
-      startDate: normalizeDate(c.startDate),
-      endDate: normalizeDate(c.endDate),
-      totalCost: cost,
-      impressions,
-      clicks,
-      conversions,
-      conversionsValue,
-      ctr: calculateCTR(clicks, impressions),
-      cpc: calculateCPC(cost, clicks),
-      roas: calculateROAS(conversionsValue, cost),
-    };
-  });
-};
-
 export interface DailyChartPoint {
   date: string;
   impressions: number;
@@ -137,4 +93,26 @@ export const aggregateDailyStats = (
   return Array.from(grouped.values()).sort((a, b) =>
     a.date.localeCompare(b.date),
   );
+};
+
+/**
+ * 캠페인 목록을 플랫폼별로 그룹화하여 특정 지표의 합계를 계산합니다.
+ */
+export const getPlatformTotals = (
+  campaigns: NormalizedCampaign[],
+  metric: keyof NormalizedCampaign,
+): Map<Platform, number> => {
+  const grouped = new Map<Platform, number>();
+
+  // 모든 플랫폼 초기화
+  PLATFORM_NAMES.forEach((name) => {
+    grouped.set(name, 0);
+  });
+
+  campaigns.forEach((c) => {
+    const val = Number(c[metric]) || 0;
+    grouped.set(c.platform, (grouped.get(c.platform) || 0) + val);
+  });
+
+  return grouped;
 };

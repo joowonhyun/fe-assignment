@@ -1,4 +1,4 @@
-import { useFilterStore } from "../store/useFilterStore";
+import { useFilterStore } from "@/features/filter/store/useFilterStore";
 import { CampaignStatus, Platform } from "@/shared/types";
 
 /**

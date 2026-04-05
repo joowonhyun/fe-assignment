@@ -1,6 +1,9 @@
-import { CampaignStatus } from "../types";
+import { CampaignStatus } from "@/shared/types";
 
-const STATUS_CONFIG: Record<CampaignStatus, { label: string; className: string }> = {
+const STATUS_CONFIG: Record<
+  CampaignStatus,
+  { label: string; className: string }
+> = {
   active: {
     label: "진행중",
     className:

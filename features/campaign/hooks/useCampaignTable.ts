@@ -3,7 +3,7 @@ import { NormalizedCampaign, CampaignStatus } from "@/shared/types";
 import {
   updateCampaignStatusesAction,
   deleteCampaignsAction,
-} from "../services/actions";
+} from "@/features/campaign/services/actions";
 import { useRouter } from "next/navigation";
 
 export type SortCol = "period" | "totalCost" | "ctr" | "cpc" | "roas" | null;

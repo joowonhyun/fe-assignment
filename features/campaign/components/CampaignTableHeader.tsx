@@ -1,6 +1,6 @@
 import { Table } from "@/shared/components/ui/Table";
 import { NormalizedCampaign } from "@/shared/types";
-import { SortCol } from "../hooks/useCampaignTable";
+import { SortCol } from "@/features/campaign/hooks/useCampaignTable";
 import { SORTABLE_COLS } from "@/shared/constants/table";
 
 interface Props {

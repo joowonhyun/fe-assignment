@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Platform } from "@/shared/types";
-import { createCampaignAction } from "../services/actions";
-import { useModalStore } from "../store/useModalStore";
+import { PLATFORM_NAMES } from "@/shared/constants/platforms";
+import { createCampaignAction } from "@/features/campaign/services/actions";
+import { useModalStore } from "@/features/campaign/store/useModalStore";
 import { useRouter } from "next/navigation";
 
 export interface CampaignFormData {
@@ -75,7 +76,10 @@ export const useCampaignForm = () => {
       errs.name = "캠페인명은 2자 이상 100자 이하로 입력해주세요.";
     }
 
-    if (!["Google", "Meta", "Naver"].includes(form.platform)) {
+    if (
+      !form.platform ||
+      !(PLATFORM_NAMES as string[]).includes(form.platform)
+    ) {
       errs.platform = "플랫폼을 선택해주세요.";
     }
 

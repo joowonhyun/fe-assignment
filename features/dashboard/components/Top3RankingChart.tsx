@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -14,41 +13,22 @@ import {
 import { Campaign, DailyStat } from "@/shared/types";
 import { useFilteredData } from "@/features/filter/hooks/useFilteredData";
 import { formatTick, getMetricFormat } from "@/shared/utils/formatters";
+import {
+  useTopRanking,
+  RankingMetric,
+} from "@/features/dashboard/hooks/useTopRanking";
 
 interface Props {
   allCampaigns: Campaign[];
   allDailyStats: DailyStat[];
 }
 
-type Metric = "roas" | "ctr" | "cpc";
-
 export default function Top3RankingChart({
   allCampaigns,
   allDailyStats,
 }: Props) {
   const { campaigns } = useFilteredData(allCampaigns, allDailyStats);
-  const [metric, setMetric] = useState<Metric>("roas");
-
-  const chartData = useMemo(() => {
-    // 배열 복사
-    let sortedList = [...campaigns];
-
-    // 정렬 로직 (CPC는 낮을수록 우수, 그 외는 높을수록 우수)
-    if (metric === "cpc") {
-      const validCpc = sortedList.filter((c) => c.cpc > 0);
-      validCpc.sort((a, b) => a.cpc - b.cpc);
-      sortedList = validCpc;
-    } else {
-      sortedList.sort((a, b) => b[metric] - a[metric]);
-    }
-
-    return sortedList.slice(0, 3).map((c) => ({
-      name: c.name.length > 10 ? c.name.substring(0, 10) + "..." : c.name,
-      fullName: c.name,
-      value: Number(c[metric].toFixed(2)),
-      platform: c.platform,
-    }));
-  }, [campaigns, metric]);
+  const { metric, setMetric, chartData } = useTopRanking(campaigns);
 
   return (
     <div className="flex flex-col h-full min-h-[250px]">
@@ -56,7 +36,7 @@ export default function Top3RankingChart({
         <h3 className="font-semibold text-[15px]">우수 캠페인 Top3</h3>
         <select
           value={metric}
-          onChange={(e) => setMetric(e.target.value as Metric)}
+          onChange={(e) => setMetric(e.target.value as RankingMetric)}
           className="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 outline-none"
         >
           <option value="roas">ROAS</option>

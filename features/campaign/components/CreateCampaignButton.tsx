@@ -1,6 +1,6 @@
 "use client";
 
-import { useModalStore } from "../store/useModalStore";
+import { useModalStore } from "@/features/campaign/store/useModalStore";
 
 export default function CreateCampaignButton() {
   const { openModal } = useModalStore();
