@@ -1,7 +1,7 @@
-import GlobalFilter from "@/components/globalFilter/GlobalFilter";
-import CampaignRegistrationModal from "@/components/campaign/CampaignRegistrationModal";
-import CreateCampaignButton from "@/components/campaign/CreateCampaignButton";
-import ThemeToggle from "@/components/layout/ThemeToggle";
+import GlobalFilter from "@/features/filter/components/GlobalFilter";
+import CampaignRegistrationModal from "@/features/campaign/components/CampaignRegistrationModal";
+import CreateCampaignButton from "@/features/campaign/components/CreateCampaignButton";
+import ThemeToggle from "@/shared/components/layout/ThemeToggle";
 
 export default function Home() {
   return (

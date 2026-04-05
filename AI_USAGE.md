@@ -45,30 +45,26 @@ AI는 금액 입력 필드에 input type="number"를 적용하고, 버튼의 활
 
 ---
 
-## 3. 확장 가능한 아키텍처 설계 의사결정
+### 3-1. 설계 원칙: SRP(단일 책임 원칙)와 Compound Component
 
-### 3-1. Compound Component 패턴 — `Table` 컴포넌트
+프로젝트 전반에서 **관심사의 분리(SoC)**를 극대화하기 위해 아래와 같은 패턴을 적용했습니다.
 
-`Table`, `Table.Header`, `Table.Body`, `Table.Row`, `Table.Head`, `Table.Cell`을 Compound Component 패턴으로 구성했습니다. 단순히 props를 내려받는 단일 컴포넌트 대신, 네임스페이스 방식으로 하위 컴포넌트를 조합하게 함으로써 다음을 달성했습니다.
+- **Compound Component 패턴 (`Table`)**: `Table`, `Header`, `Body`, `Row`, `Cell` 등을 조합하여 유연한 테이블 구조를 구성했습니다. 이를 통해 UI 일관성을 유지하면서도 각 페이지의 특수한 요구사항(정렬, 로딩 처리 등)에 기민하게 대응했습니다.
+- **Micro Component 분리 (`GlobalFilter`)**: 하나의 거대한 컴포넌트(`GlobalFilter.tsx`)에 집중되어 있던 날짜 선택, 상태 선택, 매체 선택 로직을 각각 `DateRangePicker`, `FilterToggleGroup`, `ResetButton`으로 분리했습니다. 이 과정에서 각 컴포넌트가 **하나의 역할**만 수행하도록 SRP를 철저히 지켜 디버깅과 확장이 쉬운 구조를 만들었습니다.
 
-- **유연성**: 테이블 구조를 사용처에서 자유롭게 구성 가능. 빈 상태 행(colSpan)·헤더 정렬 등 다양한 케이스 대응
-- **캡슐화**: `TableHeader` 등 5개의 내부 컴포넌트를 named export에서 제거해 외부 API를 `Table` 하나로 축소
-- **일관성**: 모든 테이블 UI가 동일한 스타일 시스템과 dark mode 처리를 공유
+### 3-2. Feature-based Architecture (기능 기반 아키텍처)
 
-`GlobalFilter` 역시 날짜·상태·매체·초기화 각 필터 항목을 독립적으로 구성할 수 있는 구조로 설계해, 추후 필터 항목 추가 시 기존 코드를 수정하지 않고 확장 가능하도록 했습니다.
+애플리케이션의 규모 확장에 대비하여 기술 계층이 아닌 **도메인 기능(Feature)** 중심으로 폴더를 재배치했습니다.
 
-### 3-2. Layered Architecture
+| 계층 | 주요 파일/경로 | 역할 |
+| --- | --- | --- |
+| **`features/campaign/`** | `components/`, `hooks/`, `services/` | 캠페인 등록, 조회, 삭제 및 상태 관리 전담 |
+| **`features/dashboard/`** | `components/`, `hooks/`, `services/` | 지표 시각화(차트) 전담 |
+| **`features/filter/`** | `components/`, `hooks/`, `store/` | 전역 필터링 상태(Zustand) 및 데이터 필터링 로직 전담 |
+| **`shared/`** | `components/ui/`, `utils/`, `types/` | 도메인 독립적인 공통 UI, 유틸리티, 전역 타입 공유 |
+| **`app/`** | `page.tsx`, `layout.tsx` | Next.js App Router 기반의 페이지 조립 및 라우팅 |
 
-관심사 분리를 위해 아래 4계층 구조를 일관되게 유지했습니다.
-
-| 계층          | 파일                      | 역할                                                |
-| ------------- | ------------------------- | --------------------------------------------------- |
-| **Data**      | `services/actions.ts`     | API 통신 (json-server CRUD), `revalidateTag` 처리   |
-| **Store**     | `store/useFilterStore.ts` | Zustand 기반 글로벌 필터 상태 (SSOT)                |
-| **Hook**      | `hooks/use*.ts`           | 비즈니스 로직 (검색·정렬·페이지네이션·폼 유효성 등) |
-| **Component** | `components/**/*.tsx`     | UI 렌더링만 담당, 로직은 hook에서 주입받음          |
-
-이 구조 덕분에, 예를 들어 검색 로직을 변경할 때 컴포넌트를 건드리지 않고 `useCampaignTable.ts`만 수정하면 됩니다.
+이러한 **동급(Co-located) 구조** 덕분에 캠페인 API 명세가 바뀌면 다른 도메인을 건드리지 않고 `features/campaign/services/api.ts`만 수정하면 되는 높은 유지보수성을 확보했습니다.
 
 ---
 
@@ -78,9 +74,9 @@ AI는 금액 입력 필드에 input type="number"를 적용하고, 버튼의 활
 
 필터 상태(`dateRange`, `status[]`, `platform[]`)를 `useFilterStore`(Zustand)에 단일 진실 공급원으로 관리했습니다.
 
-- 글로벌 필터 변경 → `useFilteredData` hook이 `useFilterStore`를 구독 → 차트·테이블 모두 즉시 반응
+- 글로벌 필터 변경 → `features/filter/hooks/useFilteredData.ts`가 `useFilterStore`를 구독 → 차트·테이블 모두 즉시 반응
 - `PlatformDonutChart`의 도넛 클릭 → `useFilterStore`의 `platform` 필터를 직접 토글 → 상단 `GlobalFilter` UI와 모든 차트·테이블이 양방향 연동
-- 필터 초기화 버튼은 `useFilterStore`의 `reset()` 액션 하나로 전체 상태 복구
+- 필터 초기화 버튼은 `features/filter/store/useFilterStore.ts`의 `reset()` 액션 하나로 전체 상태 복구
 
 Zustand를 선택한 이유는, Context API 대비 불필요한 리렌더링 없이 구독 단위를 selector로 세분화할 수 있고, 보일러플레이트 없이 전역 상태 접근이 가능하기 때문입니다.
 
@@ -88,7 +84,7 @@ Zustand를 선택한 이유는, Context API 대비 불필요한 리렌더링 없
 
 캠페인 등록 모달에서 새 캠페인을 저장하면, `router.refresh()`를 통해 Next.js의 서버 캐시를 무효화하고 목록을 즉시 갱신합니다. 별도 새로고침 없이 테이블과 대시보드 차트 모두 신규 캠페인을 반영합니다.
 
-- 서버 액션(`createCampaignAction`)에서 응답 성공 시 `revalidateTag('campaigns')` 호출
+- 서버 액션(`features/campaign/services/actions.ts`)에서 응답 성공 시 `updateTag('campaigns')` 호출
 - 클라이언트에서 `router.refresh()`로 재렌더링 트리거
 - 신규 캠페인은 `daily_stats`가 없으므로 지표(CTR, CPC, ROAS)는 0 또는 `-`으로 표시
 
