@@ -1,6 +1,6 @@
 import { Table } from "@/shared/components/ui/Table";
 import { NormalizedCampaign } from "@/shared/types";
-import { getStatusLabel } from "@/shared/utils/statusHelpers";
+import { StatusBadge } from "@/shared/components/ui/StatusBadge";
 import { formatNumber } from "@/shared/utils/formatters";
 
 interface Props {
@@ -28,7 +28,7 @@ export default function CampaignTableRow({
         {c.name}
       </Table.Cell>
       <Table.Cell className="whitespace-nowrap text-center">
-        {getStatusLabel(c.status)}
+        <StatusBadge status={c.status} />
       </Table.Cell>
       <Table.Cell className="whitespace-nowrap text-center">
         {c.platform}

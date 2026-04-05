@@ -1,6 +1,6 @@
 import { CampaignStatus } from "@/shared/types";
 
-const STATUS_CONFIG: Record<
+export const STATUS_CONFIG: Record<
   CampaignStatus,
   { label: string; className: string }
 > = {
@@ -22,11 +22,8 @@ const STATUS_CONFIG: Record<
 };
 
 /**
- * 캠페인 상태값을 한국어 배지 엘리먼트로 변환합니다.
- * @param status 'active' | 'paused' | 'ended'
+ * 상태값에 따른 레이블과 스타일 클래스를 반환합니다. (JSX 없음)
  */
-export const getStatusLabel = (status: string) => {
-  const config = STATUS_CONFIG[status as CampaignStatus];
-  if (!config) return <span>{status}</span>;
-  return <span className={config.className}>{config.label}</span>;
+export const getStatusConfig = (status: string) => {
+  return STATUS_CONFIG[status as CampaignStatus] || null;
 };
