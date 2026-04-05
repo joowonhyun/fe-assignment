@@ -12,10 +12,8 @@ import {
 import { Campaign, DailyStat } from "@/shared/types";
 import { useFilteredData } from "@/features/filter/hooks/useFilteredData";
 import { formatTick, getMetricFormat } from "@/shared/utils/formatters";
-import {
-  useTopRanking,
-  RankingMetric,
-} from "@/features/dashboard/hooks/useTopRanking";
+import { useTopRanking } from "@/features/dashboard/hooks/useTopRanking";
+import { RankingMetric } from "@/features/dashboard/types/chart";
 import { getMetricColor } from "@/features/dashboard/utils/chart";
 
 interface Props {

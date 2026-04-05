@@ -1,14 +1,8 @@
 import { useMemo, useState } from "react";
 import { NormalizedCampaign } from "@/shared/types";
 import { getPlatformTotals } from "@/shared/utils/dataset";
-import { ChartDataEntry } from "@/features/dashboard/types/chart";
+import { ChartDataEntry, PlatformMetric } from "@/features/dashboard/types/chart";
 import { PLATFORM_CONFIG } from "@/shared/constants/platforms";
-
-export type PlatformMetric =
-  | "totalCost"
-  | "impressions"
-  | "clicks"
-  | "conversions";
 
 /**
  * 캠페인 데이터를 플랫폼별(Donut Chart)로 집계하고

@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { NormalizedCampaign } from "@/shared/types";
-
-export type RankingMetric = "roas" | "ctr" | "cpc";
+import { RankingMetric } from "@/features/dashboard/types/chart";
 
 /**
  * 캠페인 목록에서 특정 지표(Metric) 기준 상위 3개를 추출하여

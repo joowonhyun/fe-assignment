@@ -4,13 +4,13 @@ import { PieChart, Pie, Tooltip, ResponsiveContainer } from "recharts";
 import { Platform, Campaign, DailyStat } from "@/shared/types";
 import { useFilterStore } from "@/features/filter/store/useFilterStore";
 import { useFilteredData } from "@/features/filter/hooks/useFilteredData";
-import { PieLabelProps } from "@/features/dashboard/types/chart";
+import {
+  PieLabelProps,
+  PlatformMetric,
+} from "@/features/dashboard/types/chart";
 import { ChartLabel } from "./ChartLabel";
 import { PLATFORM_NAMES } from "@/shared/constants/platforms";
-import {
-  usePlatformDonutData,
-  PlatformMetric,
-} from "@/features/dashboard/hooks/usePlatformDonutData";
+import { usePlatformDonutData } from "@/features/dashboard/hooks/usePlatformDonutData";
 
 interface Props {
   allCampaigns: Campaign[];

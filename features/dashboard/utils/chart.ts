@@ -1,4 +1,4 @@
-import { RankingMetric } from "@/features/dashboard/hooks/useTopRanking";
+import { RankingMetric } from "@/features/dashboard/types/chart";
 
 /**
  * 대시보드 지표(Metric)별 고유 브랜드 색상을 반환합니다.

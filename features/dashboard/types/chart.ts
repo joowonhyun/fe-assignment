@@ -17,3 +17,7 @@ export interface PieLabelProps {
   percentage?: string;
   [key: string]: any;
 }
+
+// 대시보드 지표(Metric) 타입 정의
+export type PlatformMetric = "totalCost" | "impressions" | "clicks" | "conversions";
+export type RankingMetric = "roas" | "ctr" | "cpc";
