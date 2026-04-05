@@ -1,11 +1,7 @@
 "use server";
 
 import { updateTag } from "next/cache";
-import {
-  updateCampaignStatus,
-  createCampaign,
-  deleteCampaign,
-} from "./api";
+import { updateCampaignStatus, createCampaign, deleteCampaign } from "./api";
 import { Campaign } from "@/shared/types";
 
 type ActionResult = { success: true } | { success: false; message: string };

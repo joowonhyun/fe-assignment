@@ -5,7 +5,7 @@ import { RankingMetric } from "@/features/dashboard/types/chart";
 /**
  * 캠페인 목록에서 특정 지표(Metric) 기준 상위 3개를 추출하여
  * 차트 렌더링용 데이터 스트럭처로 변환하는 커스텀 훅입니다.
- * 
+ *
  * @param {NormalizedCampaign[]} campaigns - 필터링된 전체 캠페인 목록
  * @returns {Object} 랭킹 지표 상태와 차트 데이터
  */

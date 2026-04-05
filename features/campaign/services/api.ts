@@ -11,8 +11,6 @@ export const fetchCampaigns = async (): Promise<Campaign[]> => {
   return res.json();
 };
 
-
-
 export const updateCampaignStatus = async (
   id: string,
   status: string,

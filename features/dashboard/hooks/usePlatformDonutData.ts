@@ -1,7 +1,10 @@
 import { useMemo, useState } from "react";
 import { NormalizedCampaign } from "@/shared/types";
 import { getPlatformTotals } from "@/shared/utils/dataset";
-import { ChartDataEntry, PlatformMetric } from "@/features/dashboard/types/chart";
+import {
+  ChartDataEntry,
+  PlatformMetric,
+} from "@/features/dashboard/types/chart";
 import { PLATFORM_CONFIG } from "@/shared/constants/platforms";
 
 /**

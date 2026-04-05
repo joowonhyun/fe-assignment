@@ -132,7 +132,10 @@ export default function DailyTrendChart({
                   name="클릭수"
                   stroke="#14b8a6"
                   strokeWidth={CHART_CONFIG.DAILY_TREND.STROKE_WIDTH}
-                  dot={{ r: CHART_CONFIG.DAILY_TREND.DOT_RADIUS, fill: "#14b8a6" }}
+                  dot={{
+                    r: CHART_CONFIG.DAILY_TREND.DOT_RADIUS,
+                    fill: "#14b8a6",
+                  }}
                   activeDot={{ r: CHART_CONFIG.DAILY_TREND.ACTIVE_DOT_RADIUS }}
                 />
               )}
