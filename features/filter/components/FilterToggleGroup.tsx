@@ -32,7 +32,7 @@ export default function FilterToggleGroup<T extends string>({
             <button
               key={opt.value}
               onClick={() => onToggle(opt.value)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all border ${
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all border cursor-pointer ${
                 isActive
                   ? activeClassName
                   : "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700"

@@ -40,13 +40,13 @@ export default function DailyTrendChart({
         <div className="flex gap-2">
           <button
             onClick={() => toggleMetric("impressions")}
-            className={`px-3 py-1 text-xs rounded-full border transition-colors ${showImpressions ? "bg-blue-100 border-blue-200 text-blue-700 dark:bg-blue-900/30 dark:border-blue-800/50 dark:text-blue-400" : "bg-slate-100 border-slate-200 text-slate-500 dark:bg-slate-800 dark:border-slate-700"}`}
+            className={`px-3 py-1 text-xs rounded-full border transition-colors cursor-pointer ${showImpressions ? "bg-blue-100 border-blue-200 text-blue-700 dark:bg-blue-900/30 dark:border-blue-800/50 dark:text-blue-400" : "bg-slate-100 border-slate-200 text-slate-500 dark:bg-slate-800 dark:border-slate-700"}`}
           >
             노출수
           </button>
           <button
             onClick={() => toggleMetric("clicks")}
-            className={`px-3 py-1 text-xs rounded-full border transition-colors ${showClicks ? "bg-teal-100 border-teal-200 text-teal-700 dark:bg-teal-900/30 dark:border-teal-800/50 dark:text-teal-400" : "bg-slate-100 border-slate-200 text-slate-500 dark:bg-slate-800 dark:border-slate-700"}`}
+            className={`px-3 py-1 text-xs rounded-full border transition-colors cursor-pointer ${showClicks ? "bg-teal-100 border-teal-200 text-teal-700 dark:bg-teal-900/30 dark:border-teal-800/50 dark:text-teal-400" : "bg-slate-100 border-slate-200 text-slate-500 dark:bg-slate-800 dark:border-slate-700"}`}
           >
             클릭수
           </button>

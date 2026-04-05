@@ -19,7 +19,7 @@ export default function CampaignTableRow({
       <Table.Cell className="w-10 whitespace-nowrap">
         <input
           type="checkbox"
-          className="rounded border-slate-300"
+          className="rounded border-slate-300 cursor-pointer"
           checked={checked}
           onChange={() => onToggle(c.id)}
         />

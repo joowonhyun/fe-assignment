@@ -13,7 +13,7 @@ export default function ResetButton({ onClick }: ResetButtonProps) {
     <div className="mt-4 lg:mt-0 lg:ml-auto">
       <button
         onClick={onClick}
-        className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-700 transition-all focus:ring-2 focus:ring-blue-500 outline-none"
+        className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-md hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-700 transition-all focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer"
       >
         초기화
       </button>

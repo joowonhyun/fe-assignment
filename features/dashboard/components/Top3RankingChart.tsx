@@ -37,7 +37,7 @@ export default function Top3RankingChart({
         <select
           value={metric}
           onChange={(e) => setMetric(e.target.value as RankingMetric)}
-          className="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 outline-none"
+          className="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 outline-none cursor-pointer"
         >
           <option value="roas">ROAS</option>
           <option value="ctr">CTR</option>

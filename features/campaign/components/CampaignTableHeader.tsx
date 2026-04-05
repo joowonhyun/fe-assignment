@@ -29,7 +29,7 @@ export default function CampaignTableHeader({
         <Table.Head className="w-10">
           <input
             type="checkbox"
-            className="rounded border-slate-300"
+            className="rounded border-slate-300 cursor-pointer"
             checked={checkedIds.size > 0 && checkedIds.size === pageData.length}
             onChange={onToggleCheckAll}
           />
