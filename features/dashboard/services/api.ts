@@ -1,6 +1,5 @@
 import { DailyStat } from "@/shared/types";
-
-const API_BASE_URL = "http://127.0.0.1:3001";
+import { API_BASE_URL } from "@/shared/constants/api";
 
 export const fetchDailyStats = async (): Promise<DailyStat[]> => {
   const res = await fetch(`${API_BASE_URL}/daily_stats`);
