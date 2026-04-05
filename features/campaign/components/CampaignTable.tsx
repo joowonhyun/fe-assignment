@@ -77,7 +77,7 @@ export default function CampaignTable({ allCampaigns, allDailyStats }: Props) {
                 colSpan={UI_DIMENSIONS.CAMPAIGN_TABLE.COLUMN_COUNT}
                 className="text-center py-20 text-slate-500"
               >
-                검색된 캠페인이 없습니다.
+                현재 필터나 검색 조건에 일치하는 캠페인이 없습니다.
               </Table.Cell>
             </Table.Row>
           )}
