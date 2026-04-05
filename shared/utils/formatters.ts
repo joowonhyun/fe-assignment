@@ -4,6 +4,10 @@
  * @param isCurrency 통화(원) 여부
  * @param isPercent 비율(%) 여부
  */
+const FORMAT_CONFIG = {
+  MAX_FRACTION_DIGITS: 2,
+} as const;
+
 export const formatNumber = (
   val: number,
   isCurrency: boolean = false,
@@ -11,7 +15,7 @@ export const formatNumber = (
 ) => {
   if (val === 0) return "0";
   const formatted = new Intl.NumberFormat("ko-KR", {
-    maximumFractionDigits: 2,
+    maximumFractionDigits: FORMAT_CONFIG.MAX_FRACTION_DIGITS,
   }).format(val);
   if (isCurrency) return formatted + "원";
   if (isPercent) return formatted + "%";

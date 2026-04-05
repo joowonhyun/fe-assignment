@@ -5,10 +5,11 @@ import {
   deleteCampaignsAction,
 } from "@/features/campaign/services/actions";
 import { useRouter } from "next/navigation";
+import { PAGINATION } from "@/shared/constants/pagination";
 
 export type SortCol = "period" | "totalCost" | "ctr" | "cpc" | "roas" | null;
 
-const ITEMS_PER_PAGE = 10;
+const { ITEMS_PER_PAGE } = PAGINATION;
 
 export const useCampaignTable = (campaigns: NormalizedCampaign[]) => {
   const router = useRouter();

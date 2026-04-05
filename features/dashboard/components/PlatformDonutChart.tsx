@@ -11,6 +11,7 @@ import {
 import { ChartLabel } from "./ChartLabel";
 import { PLATFORM_NAMES } from "@/shared/constants/platforms";
 import { usePlatformDonutData } from "@/features/dashboard/hooks/usePlatformDonutData";
+import { CHART_CONFIG } from "@/shared/constants/chart";
 
 interface Props {
   allCampaigns: Campaign[];
@@ -37,7 +38,10 @@ export default function PlatformDonutChart({
   };
 
   return (
-    <div className="flex flex-col h-full min-h-[250px]">
+    <div
+      className="flex flex-col h-full"
+      style={{ minHeight: CHART_CONFIG.PLATFORM_DONUT.MIN_HEIGHT }}
+    >
       <div className="flex justify-between items-center mb-2">
         <h3 className="font-semibold text-[15px]">플랫폼별 성과</h3>
         <select
@@ -60,9 +64,9 @@ export default function PlatformDonutChart({
                 data={chartData}
                 cx="50%"
                 cy="50%"
-                innerRadius={45}
-                outerRadius={70}
-                paddingAngle={2}
+                innerRadius={CHART_CONFIG.PLATFORM_DONUT.INNER_RADIUS}
+                outerRadius={CHART_CONFIG.PLATFORM_DONUT.OUTER_RADIUS}
+                paddingAngle={CHART_CONFIG.PLATFORM_DONUT.PADDING_ANGLE}
                 dataKey="value"
                 onClick={handleSliceClick}
                 cursor="pointer"
@@ -84,9 +88,9 @@ export default function PlatformDonutChart({
                   return new Intl.NumberFormat("ko-KR").format(numValue || 0);
                 }}
                 contentStyle={{
-                  borderRadius: "8px",
-                  border: "1px solid #e2e8f0",
-                  fontSize: "12px",
+                  borderRadius: CHART_CONFIG.COMMON.TOOLTIP_BORDER_RADIUS,
+                  border: `1px solid ${CHART_CONFIG.COMMON.GRID_COLOR}`,
+                  fontSize: CHART_CONFIG.COMMON.TOOLTIP_FONT_SIZE,
                 }}
               />
             </PieChart>

@@ -4,6 +4,7 @@ import { PLATFORM_NAMES } from "@/shared/constants/platforms";
 import { createCampaignAction } from "@/features/campaign/services/actions";
 import { useModalStore } from "@/features/campaign/store/useModalStore";
 import { useRouter } from "next/navigation";
+import { CAMPAIGN_LIMITS, DEFAULT_RADIX } from "@/shared/constants/campaign";
 
 export interface CampaignFormData {
   name: string;
@@ -72,8 +73,12 @@ export const useCampaignForm = () => {
   const validate = () => {
     const errs: Partial<Record<keyof CampaignFormData, string>> = {};
 
-    if (!form.name || form.name.length < 2 || form.name.length > 100) {
-      errs.name = "캠페인명은 2자 이상 100자 이하로 입력해주세요.";
+    if (
+      !form.name ||
+      form.name.length < CAMPAIGN_LIMITS.NAME_MIN_LENGTH ||
+      form.name.length > CAMPAIGN_LIMITS.NAME_MAX_LENGTH
+    ) {
+      errs.name = `캠페인명은 ${CAMPAIGN_LIMITS.NAME_MIN_LENGTH}자 이상 ${CAMPAIGN_LIMITS.NAME_MAX_LENGTH}자 이하로 입력해주세요.`;
     }
 
     if (
@@ -83,14 +88,24 @@ export const useCampaignForm = () => {
       errs.platform = "플랫폼을 선택해주세요.";
     }
 
-    const bud = parseInt(form.budget, 10);
-    if (!form.budget || isNaN(bud) || bud < 100 || bud > 1000000000) {
-      errs.budget = "예산은 100원에서 1,000,000,000 원 사이의 정수여야 합니다.";
+    const bud = parseInt(form.budget, DEFAULT_RADIX);
+    if (
+      !form.budget ||
+      isNaN(bud) ||
+      bud < CAMPAIGN_LIMITS.BUDGET_MIN ||
+      bud > CAMPAIGN_LIMITS.BUDGET_MAX
+    ) {
+      errs.budget = `예산은 ${CAMPAIGN_LIMITS.BUDGET_MIN.toLocaleString()}원에서 ${CAMPAIGN_LIMITS.BUDGET_MAX.toLocaleString()}원 사이의 정수여야 합니다.`;
     }
 
-    const cst = parseInt(form.cost, 10);
-    if (!form.cost || isNaN(cst) || cst < 0 || cst > 1000000000) {
-      errs.cost = "집행 금액은 0원에서 1,000,000,000 원 사이여야 합니다.";
+    const cst = parseInt(form.cost, DEFAULT_RADIX);
+    if (
+      !form.cost ||
+      isNaN(cst) ||
+      cst < CAMPAIGN_LIMITS.COST_MIN ||
+      cst > CAMPAIGN_LIMITS.COST_MAX
+    ) {
+      errs.cost = `집행 금액은 ${CAMPAIGN_LIMITS.COST_MIN.toLocaleString()}원에서 ${CAMPAIGN_LIMITS.COST_MAX.toLocaleString()}원 사이여야 합니다.`;
     } else if (bud && cst > bud) {
       errs.cost = "집행 금액은 예산을 초과할 수 없습니다.";
     }
@@ -122,7 +137,7 @@ export const useCampaignForm = () => {
       const result = await createCampaignAction({
         name: form.name,
         platform: form.platform as Platform,
-        budget: parseInt(form.budget, 10),
+        budget: parseInt(form.budget, DEFAULT_RADIX),
         status: "active", // 상태 고정 요구사항
         startDate: form.startDate,
         endDate: form.endDate,

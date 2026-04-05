@@ -53,7 +53,7 @@ function TableHead({
 }) {
   return (
     <th
-      className={`px-4 py-3 font-medium whitespace-nowrap ${onClick ? "cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700" : ""} ${className}`}
+      className={`px-4 py-3 font-medium whitespace-nowrap text-center ${onClick ? "cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700" : ""} ${className}`}
       onClick={onClick}
     >
       {children}

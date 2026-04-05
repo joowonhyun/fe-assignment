@@ -3,6 +3,7 @@
 import { Campaign, DailyStat } from "@/shared/types";
 import { Table } from "@/shared/components/ui/Table";
 import Pagination from "@/shared/components/ui/Pagination";
+import { UI_DIMENSIONS } from "@/shared/constants/ui";
 import { useCampaignTable } from "@/features/campaign/hooks/useCampaignTable";
 import { useFilteredData } from "@/features/filter/hooks/useFilteredData";
 import CampaignTableToolbar from "./CampaignTableToolbar";
@@ -73,7 +74,7 @@ export default function CampaignTable({ allCampaigns, allDailyStats }: Props) {
           ) : (
             <Table.Row>
               <Table.Cell
-                colSpan={9}
+                colSpan={UI_DIMENSIONS.CAMPAIGN_TABLE.COLUMN_COUNT}
                 className="text-center py-8 text-slate-500"
               >
                 검색된 캠페인이 없습니다.

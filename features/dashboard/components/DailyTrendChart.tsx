@@ -15,6 +15,7 @@ import { Campaign, DailyStat } from "@/shared/types";
 import { useFilteredData } from "@/features/filter/hooks/useFilteredData";
 import { useMetricToggle } from "@/features/dashboard/hooks/useMetricToggle";
 import { aggregateDailyStats } from "@/shared/utils/dataset";
+import { CHART_CONFIG } from "@/shared/constants/chart";
 
 interface Props {
   allCampaigns: Campaign[];
@@ -58,16 +59,19 @@ export default function DailyTrendChart({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={chartData}
-              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+              margin={CHART_CONFIG.DAILY_TREND.MARGIN}
             >
               <CartesianGrid
                 strokeDasharray="3 3"
                 vertical={false}
-                stroke="#e2e8f0"
+                stroke={CHART_CONFIG.COMMON.GRID_COLOR}
               />
               <XAxis
                 dataKey="date"
-                tick={{ fontSize: 12, fill: "#64748b" }}
+                tick={{
+                  fontSize: CHART_CONFIG.COMMON.AXIS_FONT_SIZE,
+                  fill: CHART_CONFIG.COMMON.AXIS_COLOR,
+                }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(val) => {
@@ -77,7 +81,10 @@ export default function DailyTrendChart({
                 }}
               />
               <YAxis
-                tick={{ fontSize: 12, fill: "#64748b" }}
+                tick={{
+                  fontSize: CHART_CONFIG.COMMON.AXIS_FONT_SIZE,
+                  fill: CHART_CONFIG.COMMON.AXIS_COLOR,
+                }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(val) =>
@@ -88,9 +95,9 @@ export default function DailyTrendChart({
               />
               <Tooltip
                 contentStyle={{
-                  borderRadius: "8px",
+                  borderRadius: CHART_CONFIG.COMMON.TOOLTIP_BORDER_RADIUS,
                   border: "none",
-                  fontSize: "12px",
+                  fontSize: CHART_CONFIG.COMMON.TOOLTIP_FONT_SIZE,
                   color: "#000",
                 }}
                 cursor={{
@@ -110,9 +117,12 @@ export default function DailyTrendChart({
                   dataKey="impressions"
                   name="노출수"
                   stroke="#3b82f6"
-                  strokeWidth={2}
-                  dot={{ r: 3, fill: "#3b82f6" }}
-                  activeDot={{ r: 5 }}
+                  strokeWidth={CHART_CONFIG.DAILY_TREND.STROKE_WIDTH}
+                  dot={{
+                    r: CHART_CONFIG.DAILY_TREND.DOT_RADIUS,
+                    fill: "#3b82f6",
+                  }}
+                  activeDot={{ r: CHART_CONFIG.DAILY_TREND.ACTIVE_DOT_RADIUS }}
                 />
               )}
               {showClicks && (
@@ -121,9 +131,9 @@ export default function DailyTrendChart({
                   dataKey="clicks"
                   name="클릭수"
                   stroke="#14b8a6"
-                  strokeWidth={2}
-                  dot={{ r: 3, fill: "#14b8a6" }}
-                  activeDot={{ r: 5 }}
+                  strokeWidth={CHART_CONFIG.DAILY_TREND.STROKE_WIDTH}
+                  dot={{ r: CHART_CONFIG.DAILY_TREND.DOT_RADIUS, fill: "#14b8a6" }}
+                  activeDot={{ r: CHART_CONFIG.DAILY_TREND.ACTIVE_DOT_RADIUS }}
                 />
               )}
             </LineChart>

@@ -15,6 +15,7 @@ import { formatTick, getMetricFormat } from "@/shared/utils/formatters";
 import { useTopRanking } from "@/features/dashboard/hooks/useTopRanking";
 import { RankingMetric } from "@/features/dashboard/types/chart";
 import { getMetricColor } from "@/features/dashboard/utils/chart";
+import { CHART_CONFIG } from "@/shared/constants/chart";
 
 interface Props {
   allCampaigns: Campaign[];
@@ -51,16 +52,19 @@ export default function Top3RankingChart({
             <BarChart
               data={chartData}
               layout="vertical"
-              margin={{ top: 10, right: 30, left: 10, bottom: 0 }}
+              margin={CHART_CONFIG.TOP_RANKING.MARGIN}
             >
               <CartesianGrid
                 strokeDasharray="3 3"
                 horizontal={false}
-                stroke="#e2e8f0"
+                stroke={CHART_CONFIG.COMMON.GRID_COLOR}
               />
               <XAxis
                 type="number"
-                tick={{ fontSize: 11, fill: "#64748b" }}
+                tick={{
+                  fontSize: CHART_CONFIG.TOP_RANKING.AXIS_FONT_SIZE,
+                  fill: CHART_CONFIG.COMMON.AXIS_COLOR,
+                }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={formatTick}
@@ -68,17 +72,20 @@ export default function Top3RankingChart({
               <YAxis
                 type="category"
                 dataKey="name"
-                tick={{ fontSize: 11, fill: "#64748b" }}
-                width={70}
+                tick={{
+                  fontSize: CHART_CONFIG.TOP_RANKING.AXIS_FONT_SIZE,
+                  fill: CHART_CONFIG.COMMON.AXIS_COLOR,
+                }}
+                width={CHART_CONFIG.TOP_RANKING.Y_AXIS_WIDTH}
                 tickLine={false}
                 axisLine={false}
               />
               <Tooltip
                 cursor={{ fill: "transparent" }}
                 contentStyle={{
-                  borderRadius: "8px",
-                  border: "1px solid #e2e8f0",
-                  fontSize: "12px",
+                  borderRadius: CHART_CONFIG.COMMON.TOOLTIP_BORDER_RADIUS,
+                  border: `1px solid ${CHART_CONFIG.COMMON.GRID_COLOR}`,
+                  fontSize: CHART_CONFIG.COMMON.TOOLTIP_FONT_SIZE,
                 }}
                 formatter={(value: unknown) =>
                   getMetricFormat(metric, Number(value))
@@ -91,8 +98,8 @@ export default function Top3RankingChart({
               <Bar
                 dataKey="value"
                 fill={barColor}
-                radius={[0, 4, 4, 0]}
-                barSize={24}
+                radius={CHART_CONFIG.TOP_RANKING.BAR_RADIUS}
+                barSize={CHART_CONFIG.TOP_RANKING.BAR_SIZE}
               />
             </BarChart>
           </ResponsiveContainer>

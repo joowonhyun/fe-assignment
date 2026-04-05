@@ -1,4 +1,5 @@
 import { CampaignStatus } from "@/shared/types";
+import { UI_DIMENSIONS } from "@/shared/constants/ui";
 
 interface Props {
   searchTerm: string;
@@ -29,7 +30,9 @@ export default function CampaignTableToolbar({
 
       <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
         {/* Search */}
-        <div className="relative w-full md:w-64">
+        <div
+          className={`relative w-full md:${UI_DIMENSIONS.TOOLBAR.SEARCH_INPUT_WIDTH}`}
+        >
           <input
             type="text"
             placeholder="캠페인명 검색"
@@ -55,7 +58,9 @@ export default function CampaignTableToolbar({
           검색 결과 <b>{totalItems}</b> / 전체 <b>{totalCampaignsLength}</b>건
         </div>
 
-        <div className="hidden md:block w-px h-6 bg-slate-200 dark:bg-slate-700" />
+        <div
+          className={`hidden md:block w-px ${UI_DIMENSIONS.TOOLBAR.DIVIDER_HEIGHT} bg-slate-200 dark:bg-slate-700`}
+        />
 
         {/* Bulk Actions */}
         <div className="flex items-center gap-2 w-full md:w-auto">

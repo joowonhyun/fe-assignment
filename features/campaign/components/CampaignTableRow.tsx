@@ -33,7 +33,7 @@ export default function CampaignTableRow({
       <Table.Cell className="whitespace-nowrap text-center">
         {c.platform}
       </Table.Cell>
-      <Table.Cell className="text-slate-500 text-xs whitespace-nowrap">
+      <Table.Cell className="text-slate-500 text-xs whitespace-nowrap text-center">
         {`${c.startDate} ~ ${c.endDate}`}
       </Table.Cell>
       <Table.Cell className="text-right font-medium whitespace-nowrap">

@@ -8,6 +8,7 @@ import {
   formatNumericDisplay,
 } from "@/shared/utils/formatters";
 import { PLATFORM_OPTIONS } from "@/shared/constants/options";
+import { CAMPAIGN_LIMITS } from "@/shared/constants/campaign";
 
 export default function CampaignRegistrationModal() {
   const {
@@ -48,7 +49,7 @@ export default function CampaignRegistrationModal() {
               type="text"
               value={form.name}
               onChange={(e) => handleChange("name", e.target.value)}
-              placeholder="캠페인명을 입력하세요 (2~100자)"
+              placeholder={`캠페인명을 입력하세요 (${CAMPAIGN_LIMITS.NAME_MIN_LENGTH}~${CAMPAIGN_LIMITS.NAME_MAX_LENGTH}자)`}
               className="px-3 py-2 bg-slate-50 border border-slate-200 rounded outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800 dark:border-slate-700"
             />
             {errors.name && (
@@ -91,7 +92,7 @@ export default function CampaignRegistrationModal() {
                 onChange={(e) =>
                   handleChange("budget", sanitizeNumericInput(e.target.value))
                 }
-                placeholder="100 ~ 1,000,000,000"
+                placeholder={`${CAMPAIGN_LIMITS.BUDGET_MIN.toLocaleString()} ~ ${CAMPAIGN_LIMITS.BUDGET_MAX.toLocaleString()}`}
                 className="px-3 py-2 bg-slate-50 border border-slate-200 rounded outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800 dark:border-slate-700"
               />
               {errors.budget && (
