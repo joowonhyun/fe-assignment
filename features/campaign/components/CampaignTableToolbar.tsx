@@ -54,8 +54,12 @@ export default function CampaignTableToolbar({
           </svg>
         </div>
 
-        <div className="text-sm text-slate-500 w-full md:w-auto text-right">
-          검색 결과 <b>{totalItems}</b> / 전체 <b>{totalCampaignsLength}</b>건
+        <div className="flex items-center gap-1.5 text-sm whitespace-nowrap">
+          <span className="text-slate-500">검색 결과</span>
+          <span className="font-bold text-blue-600 dark:text-blue-400">{totalItems}</span>
+          <span className="text-slate-300 dark:text-slate-700">/</span>
+          <span className="text-slate-500">전체</span>
+          <span className="font-bold text-slate-800 dark:text-slate-200">{totalCampaignsLength}건</span>
         </div>
 
         <div

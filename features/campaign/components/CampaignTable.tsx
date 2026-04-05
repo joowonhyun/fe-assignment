@@ -52,7 +52,7 @@ export default function CampaignTable({ allCampaigns, allDailyStats }: Props) {
         onBulkDelete={handleBulkDelete}
       />
 
-      <Table>
+      <Table className="min-h-[490px]">
         <CampaignTableHeader
           pageData={pageData}
           checkedIds={checkedIds}
@@ -75,7 +75,7 @@ export default function CampaignTable({ allCampaigns, allDailyStats }: Props) {
             <Table.Row>
               <Table.Cell
                 colSpan={UI_DIMENSIONS.CAMPAIGN_TABLE.COLUMN_COUNT}
-                className="text-center py-8 text-slate-500"
+                className="text-center py-20 text-slate-500"
               >
                 검색된 캠페인이 없습니다.
               </Table.Cell>
