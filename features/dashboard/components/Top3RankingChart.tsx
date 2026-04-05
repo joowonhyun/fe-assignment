@@ -8,7 +8,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Cell,
 } from "recharts";
 import { Campaign, DailyStat } from "@/shared/types";
 import { useFilteredData } from "@/features/filter/hooks/useFilteredData";
@@ -17,6 +16,7 @@ import {
   useTopRanking,
   RankingMetric,
 } from "@/features/dashboard/hooks/useTopRanking";
+import { getMetricColor } from "@/features/dashboard/utils/chart";
 
 interface Props {
   allCampaigns: Campaign[];
@@ -29,6 +29,8 @@ export default function Top3RankingChart({
 }: Props) {
   const { campaigns } = useFilteredData(allCampaigns, allDailyStats);
   const { metric, setMetric, chartData } = useTopRanking(campaigns);
+
+  const barColor = getMetricColor(metric);
 
   return (
     <div className="flex flex-col h-full min-h-[250px]">
@@ -87,14 +89,13 @@ export default function Top3RankingChart({
                   payload?.[0]?.payload?.fullName || label
                 }
               />
-              <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={24}>
-                {chartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={metric === "cpc" ? "#8b5cf6" : "#f59e0b"}
-                  />
-                ))}
-              </Bar>
+              {/* 모든 막대 색상이 같다면 Cell 없이 fill 속성만 사용합니다. */}
+              <Bar
+                dataKey="value"
+                fill={barColor}
+                radius={[0, 4, 4, 0]}
+                barSize={24}
+              />
             </BarChart>
           </ResponsiveContainer>
         ) : (
