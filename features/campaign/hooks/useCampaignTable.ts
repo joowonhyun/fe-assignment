@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { NormalizedCampaign, CampaignStatus } from "@/shared/types";
 import {
   updateCampaignStatusesAction,
@@ -20,6 +20,11 @@ export const useCampaignTable = (campaigns: NormalizedCampaign[]) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
   const [bulkStatus, setBulkStatus] = useState<CampaignStatus | "">("");
+
+  // 필터링된 데이터 기반이 바뀌면(전역 필터 변경 등) 페이지를 1로 리셋
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [campaigns]);
 
   // ── Derived data ────────────────────────────────────────
   const filtered = useMemo(
