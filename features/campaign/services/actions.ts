@@ -1,6 +1,5 @@
 "use server";
 
-import { updateTag } from "next/cache";
 import { updateCampaignStatus, createCampaign, deleteCampaign } from "./api";
 import { Campaign } from "@/shared/types";
 
@@ -12,7 +11,6 @@ export async function updateCampaignStatusesAction(
 ): Promise<ActionResult> {
   try {
     await Promise.all(ids.map((id) => updateCampaignStatus(id, status)));
-    updateTag("campaigns");
     return { success: true };
   } catch (e) {
     const message =
@@ -29,7 +27,6 @@ export async function createCampaignAction(
 ): Promise<ActionResult> {
   try {
     await createCampaign(campaign);
-    updateTag("campaigns");
     return { success: true };
   } catch (e) {
     const message =
@@ -46,7 +43,6 @@ export async function deleteCampaignsAction(
 ): Promise<ActionResult> {
   try {
     await Promise.all(ids.map((id) => deleteCampaign(id)));
-    updateTag("campaigns");
     return { success: true };
   } catch (e) {
     const message =

@@ -3,10 +3,7 @@ import { Campaign } from "@/shared/types";
 const API_BASE_URL = "http://127.0.0.1:3001";
 
 export const fetchCampaigns = async (): Promise<Campaign[]> => {
-  const res = await fetch(`${API_BASE_URL}/campaigns`, {
-    next: { tags: ["campaigns"] },
-    cache: "force-cache",
-  });
+  const res = await fetch(`${API_BASE_URL}/campaigns`);
   if (!res.ok) throw new Error("캠페인 목록을 불러오는 데 실패했습니다.");
   return res.json();
 };
