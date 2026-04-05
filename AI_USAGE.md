@@ -27,7 +27,7 @@ AI는 모든 page.tsx와 하위 컴포넌트에 "use client"를 기본으로 생
 ### 사례2 : 클라이언트 라우터 캐시(Client Router Cache) 동기화 오류 해결
 
 [문제 상황]
-AI를 통해 Form 관련 로직을 리팩토링한 후, 서버 데이터는 정상 갱신되지만 UI 리스트가 즉각 업데이트되지 않는 현상을 발견했습니다. AI가 제안한 리팩토링 코드가 Server Action의 서버측 무효화(revalidateTag)에는 충실했지만, 브라우저의 클라이언트 라우터 캐시(Client Router Cache) 갱신까지는 고려하지 못했음을 파악했습니다.
+AI를 통해 Form 관련 로직을 리팩토링한 후, 서버 데이터는 정상 갱신되지만 UI 리스트가 즉각 업데이트되지 않는 현상을 발견했습니다. AI가 제안한 리팩토링 코드가 Server Action의 서버측 무효화에는 충실했지만, 브라우저의 클라이언트 라우터 캐시(Client Router Cache) 갱신까지는 고려하지 못했음을 파악했습니다.
 
 [수정 및 판단]
 useCampaignForm.ts의 제출 성공 핸들러에 useRouter().refresh()를 직접 추가하여, 서버의 변경사항이 클라이언트 UI에 즉각 반영되도록 강제했습니다.
@@ -56,13 +56,13 @@ AI는 금액 입력 필드에 input type="number"를 적용하고, 버튼의 활
 
 애플리케이션의 규모 확장에 대비하여 기술 계층이 아닌 **도메인 기능(Feature)** 중심으로 폴더를 재배치했습니다.
 
-| 계층 | 주요 파일/경로 | 역할 |
-| --- | --- | --- |
-| **`features/campaign/`** | `components/`, `hooks/`, `services/` | 캠페인 등록, 조회, 삭제 및 상태 관리 전담 |
-| **`features/dashboard/`** | `components/`, `hooks/`, `services/` | 지표 시각화(차트) 전담 |
-| **`features/filter/`** | `components/`, `hooks/`, `store/` | 전역 필터링 상태(Zustand) 및 데이터 필터링 로직 전담 |
-| **`shared/`** | `components/ui/`, `utils/`, `types/` | 도메인 독립적인 공통 UI, 유틸리티, 전역 타입 공유 |
-| **`app/`** | `page.tsx`, `layout.tsx` | Next.js App Router 기반의 페이지 조립 및 라우팅 |
+| 계층                      | 주요 파일/경로                       | 역할                                                 |
+| ------------------------- | ------------------------------------ | ---------------------------------------------------- |
+| **`features/campaign/`**  | `components/`, `hooks/`, `services/` | 캠페인 등록, 조회, 삭제 및 상태 관리 전담            |
+| **`features/dashboard/`** | `components/`, `hooks/`, `services/` | 지표 시각화(차트) 전담                               |
+| **`features/filter/`**    | `components/`, `hooks/`, `store/`    | 전역 필터링 상태(Zustand) 및 데이터 필터링 로직 전담 |
+| **`shared/`**             | `components/ui/`, `utils/`, `types/` | 도메인 독립적인 공통 UI, 유틸리티, 전역 타입 공유    |
+| **`app/`**                | `page.tsx`, `layout.tsx`             | Next.js App Router 기반의 페이지 조립 및 라우팅      |
 
 이러한 **동급(Co-located) 구조** 덕분에 캠페인 API 명세가 바뀌면 다른 도메인을 건드리지 않고 `features/campaign/services/api.ts`만 수정하면 되는 높은 유지보수성을 확보했습니다.
 
