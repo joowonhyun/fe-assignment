@@ -1,4 +1,4 @@
-# 🚀 마케팅 캠페인 대시보드 (Marketing Campaign Dashboard)
+# 🚀 마케팅 캠페인 성과 대시보드
 
 실시간 마케팅 성과를 시각화하고 캠페인을 효율적으로 관리하기 위한 웹 애플리케이션입니다.
 다크 모드와 라이트 모드를 모두 지원하며, 직관적인 데이터 시각화와 일괄 관리 기능을 제공합니다.
@@ -19,13 +19,39 @@
 
 ## 🏃 실행 방법
 
+이 프로젝트는 **pnpm** 패키지 매니저를 사용합니다. `pnpm`이 설치되어 있지 않다면 아래 방법 중 하나를 선택해 설치하세요.
+
+### 방법 1: Corepack 사용 (권장 - Node.js 16.13+ 내장)
+
 ```bash
+corepack enable
+corepack prepare pnpm@latest --activate
+```
+
+### 방법 2: npm 사용
+
+```bash
+npm install -g pnpm
+```
+
+### 설치 확인
+
+```bash
+pnpm -v
+```
+
+### pnpm 설치가 완료되었다면 아래 명령어를 순서대로 입력하세요.
+
+```bash
+# 의존성 설치
 pnpm install
-pnpm run dev
+
+# 개발 서버 실행
+pnpm dev
 ```
 
 > [!IMPORTANT]
-> `pnpm run dev` 실행 시 `json-server`(3001)와 `Next.js`(3000)가 동시에 실행됩니다.
+> `pnpm dev` 실행 시 `json-server`(3001)와 `Next.js`(3000)가 동시에 실행됩니다.
 
 ---
 
@@ -64,18 +90,6 @@ pnpm run dev
 ## 🏗 아키텍처 및 설계
 
 애플리케이션의 확장성과 유지보수성을 위해 **기능 기반 아키텍처(Feature-based Architecture)**를 채택했습니다.
-
-```mermaid
-graph TD
-    App[app/ - Routing & Layout] --> Features
-    Features --> C[features/campaign]
-    Features --> D[features/dashboard]
-    Features --> F[features/filter]
-    Features --> S[shared/ - Core UI & Utils]
-
-    C --> |Service Layer| API[json-server]
-    D --> |Data Visualization| API
-```
 
 ### 폴더 구조 상세
 
