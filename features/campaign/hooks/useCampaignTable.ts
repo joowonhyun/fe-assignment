@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { NormalizedCampaign, CampaignStatus } from "@/shared/types";
 import {
   updateCampaignStatusesAction,
@@ -23,9 +23,11 @@ export const useCampaignTable = (campaigns: NormalizedCampaign[]) => {
   const [bulkStatus, setBulkStatus] = useState<CampaignStatus | "">("");
 
   // 필터링된 데이터 기반이 바뀌면(전역 필터 변경 등) 페이지를 1로 리셋
-  useEffect(() => {
+  const [prevCampaigns, setPrevCampaigns] = useState(campaigns);
+  if (prevCampaigns !== campaigns) {
+    setPrevCampaigns(campaigns);
     setCurrentPage(1);
-  }, [campaigns]);
+  }
 
   // ── Derived data ────────────────────────────────────────
   const filtered = useMemo(
@@ -75,7 +77,8 @@ export const useCampaignTable = (campaigns: NormalizedCampaign[]) => {
   const toggleCheck = (id: string) => {
     setCheckedIds((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
   };
@@ -129,7 +132,7 @@ export const useCampaignTable = (campaigns: NormalizedCampaign[]) => {
     checkedIds,
     bulkStatus,
     setBulkStatus,
-    setCurrentPage,
+    handlePageChange: (page: number) => setCurrentPage(page),
     pageData,
     totalCampaignsLength: campaigns.length,
     handleSearch,

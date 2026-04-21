@@ -27,7 +27,7 @@ export default function CampaignTable({ allCampaigns, allDailyStats }: Props) {
     checkedIds,
     bulkStatus,
     setBulkStatus,
-    setCurrentPage,
+    handlePageChange,
     pageData,
     totalCampaignsLength,
     handleSearch,
@@ -87,7 +87,7 @@ export default function CampaignTable({ allCampaigns, allDailyStats }: Props) {
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Controller } from "react-hook-form";
 import { useCampaignForm } from "@/features/campaign/hooks/useCampaignForm";
 import { useLockBodyScroll } from "@/shared/hooks/useLockBodyScroll";
 import {
@@ -13,10 +14,10 @@ import { CAMPAIGN_LIMITS } from "@/shared/constants/campaign";
 export default function CampaignRegistrationModal() {
   const {
     isOpen,
-    form,
+    register,
+    control,
     errors,
     isSubmitting,
-    handleChange,
     handleSubmit,
     closeModal,
   } = useCampaignForm();
@@ -47,13 +48,12 @@ export default function CampaignRegistrationModal() {
             </label>
             <input
               type="text"
-              value={form.name}
-              onChange={(e) => handleChange("name", e.target.value)}
+              {...register("name")}
               placeholder={`캠페인명을 입력하세요 (${CAMPAIGN_LIMITS.NAME_MIN_LENGTH}~${CAMPAIGN_LIMITS.NAME_MAX_LENGTH}자)`}
               className="px-3 py-2 bg-slate-50 border border-slate-200 rounded outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800 dark:border-slate-700"
             />
             {errors.name && (
-              <span className="text-xs text-red-500">{errors.name}</span>
+              <span className="text-xs text-red-500">{errors.name.message}</span>
             )}
           </div>
 
@@ -63,8 +63,7 @@ export default function CampaignRegistrationModal() {
               광고 매체 <span className="text-red-500">*</span>
             </label>
             <select
-              value={form.platform}
-              onChange={(e) => handleChange("platform", e.target.value)}
+              {...register("platform")}
               className="px-3 py-2 bg-slate-50 border border-slate-200 rounded outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800 dark:border-slate-700 cursor-pointer"
             >
               <option value="">매체 선택</option>
@@ -75,7 +74,7 @@ export default function CampaignRegistrationModal() {
               ))}
             </select>
             {errors.platform && (
-              <span className="text-xs text-red-500">{errors.platform}</span>
+              <span className="text-xs text-red-500">{errors.platform.message}</span>
             )}
           </div>
 
@@ -85,18 +84,25 @@ export default function CampaignRegistrationModal() {
               <label className="text-sm font-semibold">
                 예산 (원) <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
-                inputMode="numeric"
-                value={formatNumericDisplay(form.budget)}
-                onChange={(e) =>
-                  handleChange("budget", sanitizeNumericInput(e.target.value))
-                }
-                placeholder={`${CAMPAIGN_LIMITS.BUDGET_MIN.toLocaleString()} ~ ${CAMPAIGN_LIMITS.BUDGET_MAX.toLocaleString()}`}
-                className="px-3 py-2 bg-slate-50 border border-slate-200 rounded outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800 dark:border-slate-700"
+              <Controller
+                name="budget"
+                control={control}
+                render={({ field }) => (
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumericDisplay(field.value)}
+                    onChange={(e) =>
+                      field.onChange(sanitizeNumericInput(e.target.value))
+                    }
+                    onBlur={field.onBlur}
+                    placeholder={`${CAMPAIGN_LIMITS.BUDGET_MIN.toLocaleString()} ~ ${CAMPAIGN_LIMITS.BUDGET_MAX.toLocaleString()}`}
+                    className="px-3 py-2 bg-slate-50 border border-slate-200 rounded outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800 dark:border-slate-700"
+                  />
+                )}
               />
               {errors.budget && (
-                <span className="text-xs text-red-500">{errors.budget}</span>
+                <span className="text-xs text-red-500">{errors.budget.message}</span>
               )}
             </div>
 
@@ -105,18 +111,25 @@ export default function CampaignRegistrationModal() {
               <label className="text-sm font-semibold">
                 집행 금액 (원) <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
-                inputMode="numeric"
-                value={formatNumericDisplay(form.cost)}
-                onChange={(e) =>
-                  handleChange("cost", sanitizeNumericInput(e.target.value))
-                }
-                placeholder="0 ~ 예산 내"
-                className="px-3 py-2 bg-slate-50 border border-slate-200 rounded outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800 dark:border-slate-700"
+              <Controller
+                name="cost"
+                control={control}
+                render={({ field }) => (
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumericDisplay(field.value)}
+                    onChange={(e) =>
+                      field.onChange(sanitizeNumericInput(e.target.value))
+                    }
+                    onBlur={field.onBlur}
+                    placeholder="0 ~ 예산 내"
+                    className="px-3 py-2 bg-slate-50 border border-slate-200 rounded outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800 dark:border-slate-700"
+                  />
+                )}
               />
               {errors.cost && (
-                <span className="text-xs text-red-500">{errors.cost}</span>
+                <span className="text-xs text-red-500">{errors.cost.message}</span>
               )}
             </div>
           </div>
@@ -129,12 +142,11 @@ export default function CampaignRegistrationModal() {
               </label>
               <input
                 type="date"
-                value={form.startDate}
-                onChange={(e) => handleChange("startDate", e.target.value)}
+                {...register("startDate")}
                 className="px-3 py-2 bg-slate-50 border border-slate-200 rounded outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800 dark:border-slate-700"
               />
               {errors.startDate && (
-                <span className="text-xs text-red-500">{errors.startDate}</span>
+                <span className="text-xs text-red-500">{errors.startDate.message}</span>
               )}
             </div>
 
@@ -145,12 +157,11 @@ export default function CampaignRegistrationModal() {
               </label>
               <input
                 type="date"
-                value={form.endDate}
-                onChange={(e) => handleChange("endDate", e.target.value)}
+                {...register("endDate")}
                 className="px-3 py-2 bg-slate-50 border border-slate-200 rounded outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-800 dark:border-slate-700"
               />
               {errors.endDate && (
-                <span className="text-xs text-red-500">{errors.endDate}</span>
+                <span className="text-xs text-red-500">{errors.endDate.message}</span>
               )}
             </div>
           </div>
