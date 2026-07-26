@@ -95,27 +95,27 @@ https://www.marketing-dashboard.site
 
 ## 💡 설계 하이라이트
 
-### httpOnly 쿠키 + BFF — XSS로부터 완전 격리된 토큰 저장
+### 1. httpOnly 쿠키 + BFF — XSS로부터 완전 격리된 토큰 저장
 
 JWT를 `localStorage`나 일반 쿠키가 아닌 httpOnly 쿠키로만 다뤄서 JavaScript가 토큰에 접근할 방법 자체를 없앴습니다. 이걸 가능하게 하려고 프론트엔드가 API 클라이언트를 컨텍스트별로 분리했습니다: RSC(`serverFetch`)는 쿠키를 읽기만 하고, Server Action(`actionFetch`)은 쿠키를 쓸 수 있으므로 401을 받으면 그 자리에서 refreshToken으로 갱신 후 재시도합니다. Next.js의 RSC는 쿠키 쓰기가 금지되어 있다는 제약을 그대로 반영한 설계입니다.
 
-### 프론트/백엔드 이중 유효성 검사
+### 2. 프론트/백엔드 이중 유효성 검사
 
 `features/campaign/schemas/campaignFormSchema.ts`의 zod 규칙(이름 2~100자, 예산 100~10억원, 종료일 > 시작일)을 NestJS DTO의 class-validator 데코레이터에도 그대로 반영했습니다. 클라이언트 검증을 우회해 직접 API를 호출해도 동일한 규칙이 서버에서 다시 강제됩니다.
 
-### 지저분한 실데이터에 대한 정규화
+### 3. 지저분한 실데이터에 대한 정규화
 
 시딩 대상 `db.json`에는 `platform: "네이버"/"facebook"/"Facebook"`, `status: "running"/"stopped"` 같은 비정형 값과 `budget: "2000000원"`처럼 타입이 섞인 필드가 실제로 존재합니다. 프론트엔드에 이미 이런 값을 표준값(`Google`/`Naver`/`Meta`, `active`/`paused`/`ended`)으로 정규화하는 유틸(`shared/utils/dataset.ts`)이 있다는 걸 확인하고, 백엔드 시딩 스크립트에도 동일한 정규화 규칙을 그대로 미러링해서 프론트-백엔드 간 데이터 해석이 어긋나지 않도록 했습니다.
 
-### Parallel Routes로 체감 성능 확보
+### 4. Parallel Routes로 체감 성능 확보
 
 Recharts는 번들 크기가 크고 초기 렌더 연산량이 많습니다. `@charts`/`@table` Parallel Routes로 두 영역을 독립적으로 로딩해서, 무거운 차트가 준비되는 동안에도 나머지 레이아웃이 먼저 사용자에게 노출되도록 했습니다.
 
-### no-store 전략
+### 5. no-store 전략
 
 모든 데이터 페칭에 캐싱보다 정확성을 우선하는 `no-store` 전략을 적용했습니다. 캠페인 상태를 변경하거나 새로 등록한 직후에도 항상 최신 Postgres 데이터를 보장합니다.
 
-### 매직 넘버 중앙 관리
+### 6. 매직 넘버 중앙 관리
 
 컴포넌트 내부에 흩어져 있던 하드코딩 수치(예산 한도, 페이지 크기, 차트 색상 등)를 `shared/constants/`로 모아, 정책이 바뀌어도 한 곳만 수정하면 되도록 구조화했습니다.
 
@@ -123,7 +123,7 @@ Recharts는 번들 크기가 크고 초기 렌더 연산량이 많습니다. `@c
 
 ## 🔧 트러블슈팅
 
-### 빌드된 서버 파일 위치가 예상과 달랐습니다
+### 1. 빌드된 서버 파일 위치가 예상과 달랐습니다
 
 `nest build`를 돌리면 원래 `server/dist/main.js`가 나오고, `node dist/main`으로 실행하면 됩니다. Render에 처음 배포하고 그대로 실행했더니 `Cannot find module`. 서버가 안 켜졌습니다.
 
@@ -150,7 +150,7 @@ TypeScript는 `rootDir`을 안 정해주면 컴파일 대상 파일들의 공통
 
 처음엔 실행 스크립트를 `node dist/src/main`으로 고쳐서 넘어갔는데, 원인은 안 건드리고 증상만 우회한 거라 찜찜했습니다. 그래서 Prisma 출력 경로를 `src/generated/prisma`로 옮기고, `prisma.config.ts`와 `prisma/` 폴더는 `tsconfig.build.json`의 `exclude`에 넣었습니다(시딩은 `tsx prisma/seed.ts`로 따로 돌아가니 빌드에 안 껴도 됩니다). 이제 tsc가 보는 파일이 전부 `src/` 안에만 있어서 `rootDir`이 자연스럽게 `src/`로 잡히고, `dist/main.js`가 제자리에 생깁니다. 실행 스크립트도 `node dist/main`으로 되돌렸습니다.
 
-### Render의 "Root Directory" 설정을 `server/`로 잡으면 안 되는 이유
+### 2. Render의 "Root Directory" 설정을 `server/`로 잡으면 안 되는 이유
 
 Render엔 "이 저장소에서 어느 폴더를 기준으로 빌드·실행할지" 정하는 Root Directory 옵션이 있습니다. `frontend/`와 `server/`가 한 저장소에 같이 있는 구조라, 백엔드 배포할 땐 당연히 `server/`로 잡아야 할 것 같았습니다.
 
@@ -158,7 +158,7 @@ Render엔 "이 저장소에서 어느 폴더를 기준으로 빌드·실행할�
 
 직접 겪은 건 아니고, 배포 전에 Render 문서를 읽다가 미리 발견했습니다. Root Directory는 비워서 저장소 전체를 가져오게 하고, 대신 Build/Start Command 맨 앞에 `cd server &&`를 붙여 그 안에서 명령어가 돌게 했습니다.
 
-### GitHub Actions `schedule`이 생각보다 안 돌았습니다
+### 3. GitHub Actions `schedule`이 생각보다 안 돌았습니다
 
 Render 무료 티어는 15분 넘게 요청이 없으면 슬립 상태로 들어가고, 다시 깨어나는 데 30~60초가 걸립니다. 포트폴리오를 처음 열어본 사람이 로딩만 1분 가까이 붙잡고 있으면 곤란하겠다 싶어서, 5분마다 헬스체크 핑을 보내는 GitHub Actions 워크플로(`schedule: */5 * * * *`)를 먼저 붙여봤습니다. 그런데 실제로는 최초 푸시 후 80분 동안 단 한 번도 안 돌았고, 재푸시해서 겨우 한 번 돈 다음엔 또 29분 동안 잠잠했습니다. 이 정도면 GitHub의 schedule 트리거를 믿고 갈 수는 없겠다 싶어서 워크플로는 지우고, 대신 외부 uptime 모니터링 서비스(UptimeRobot)가 5분마다 직접 헬스체크 핑을 쏘도록 바꿨습니다. (Render 무료 티어 한도(750시간)는 안 넘어서 이 방식으로 정리)
 
