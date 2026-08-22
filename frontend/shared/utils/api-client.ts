@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 import { API_BASE_URL } from "@/shared/constants/api";
 import {
+  ACCESS_COOKIE_OPTIONS,
   ACCESS_TOKEN_COOKIE,
-  ACCESS_TOKEN_MAX_AGE,
   REFRESH_TOKEN_COOKIE,
 } from "@/shared/constants/auth";
 
@@ -108,13 +108,7 @@ export const actionFetch = async <T>(
   }
 
   const { accessToken } = (await refreshRes.json()) as { accessToken: string };
-  cookieStore.set(ACCESS_TOKEN_COOKIE, accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: ACCESS_TOKEN_MAX_AGE,
-    path: "/",
-  });
+  cookieStore.set(ACCESS_TOKEN_COOKIE, accessToken, ACCESS_COOKIE_OPTIONS);
 
   const [retryUrl, retryInit] = buildRequest(path, accessToken, options);
   const retryRes = await fetch(retryUrl, retryInit);

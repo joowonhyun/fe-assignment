@@ -4,10 +4,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { API_BASE_URL } from "@/shared/constants/api";
 import {
+  ACCESS_COOKIE_OPTIONS,
   ACCESS_TOKEN_COOKIE,
-  ACCESS_TOKEN_MAX_AGE,
+  REFRESH_COOKIE_OPTIONS,
   REFRESH_TOKEN_COOKIE,
-  REFRESH_TOKEN_MAX_AGE,
 } from "@/shared/constants/auth";
 
 type LoginState = { success: true } | { success: false; message: string };
@@ -34,22 +34,9 @@ async function performLogin(email: string, password: string): Promise<LoginState
   };
 
   const cookieStore = await cookies();
-  const secure = process.env.NODE_ENV === "production";
 
-  cookieStore.set(ACCESS_TOKEN_COOKIE, accessToken, {
-    httpOnly: true,
-    secure,
-    sameSite: "lax",
-    maxAge: ACCESS_TOKEN_MAX_AGE,
-    path: "/",
-  });
-  cookieStore.set(REFRESH_TOKEN_COOKIE, refreshToken, {
-    httpOnly: true,
-    secure,
-    sameSite: "lax",
-    maxAge: REFRESH_TOKEN_MAX_AGE,
-    path: "/",
-  });
+  cookieStore.set(ACCESS_TOKEN_COOKIE, accessToken, ACCESS_COOKIE_OPTIONS);
+  cookieStore.set(REFRESH_TOKEN_COOKIE, refreshToken, REFRESH_COOKIE_OPTIONS);
 
   redirect("/");
 }
