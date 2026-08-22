@@ -5,3 +5,10 @@ export const CAMPAIGN_LIMITS = {
   BUDGET_MIN: 100,
   BUDGET_MAX: 1000000000,
 } as const;
+
+// DTO마다 복사하지 않도록 여기 한 곳에만 정의한다.
+export const PLATFORMS = ['Google', 'Naver', 'Meta'] as const;
+export const STATUSES = ['active', 'paused', 'ended'] as const;
+
+export type Platform = (typeof PLATFORMS)[number];
+export type Status = (typeof STATUSES)[number];

@@ -1,6 +1,6 @@
 "use server";
 
-import { updateCampaignStatus, createCampaign, deleteCampaign } from "./api";
+import { updateCampaignStatuses, createCampaign, deleteCampaigns } from "./api";
 import { Campaign } from "@/shared/types";
 
 type ActionResult = { success: true } | { success: false; message: string };
@@ -10,7 +10,7 @@ export async function updateCampaignStatusesAction(
   status: string,
 ): Promise<ActionResult> {
   try {
-    await Promise.all(ids.map((id) => updateCampaignStatus(id, status)));
+    await updateCampaignStatuses(ids, status);
     return { success: true };
   } catch (e) {
     const message =
@@ -40,7 +40,7 @@ export async function deleteCampaignsAction(
   ids: string[],
 ): Promise<ActionResult> {
   try {
-    await Promise.all(ids.map((id) => deleteCampaign(id)));
+    await deleteCampaigns(ids);
     return { success: true };
   } catch (e) {
     const message =

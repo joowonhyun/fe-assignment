@@ -1,7 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignStatusDto } from './dto/update-campaign-status.dto';
+import {
+  BulkDeleteCampaignsDto,
+  BulkUpdateCampaignStatusDto,
+} from './dto/bulk-campaign.dto';
 
 const toDateOnly = (date: Date | null): string | null =>
   date ? date.toISOString().slice(0, 10) : null;
@@ -61,5 +69,41 @@ export class CampaignsService {
 
   async remove(id: string) {
     await this.prisma.campaign.delete({ where: { id } });
+  }
+
+  /**
+   * 여러 건의 상태를 한 요청으로 변경한다.
+   * 존재하지 않는 id가 섞이면 아무것도 바꾸지 않고 실패시킨다 — 일부만 반영된 채
+   * "성공"으로 보고되면 화면과 DB가 어긋난다.
+   */
+  async updateStatuses(dto: BulkUpdateCampaignStatusDto) {
+    return this.prisma.$transaction(async (tx) => {
+      const found = await tx.campaign.count({ where: { id: { in: dto.ids } } });
+      if (found !== dto.ids.length) {
+        throw new NotFoundException(
+          `요청한 캠페인 ${dto.ids.length}건 중 ${found}건만 존재합니다. 목록을 새로고침해주세요.`,
+        );
+      }
+
+      const { count } = await tx.campaign.updateMany({
+        where: { id: { in: dto.ids } },
+        data: { status: dto.status },
+      });
+      return { count };
+    });
+  }
+
+  /** 여러 건을 한 요청으로 삭제한다. 부분 삭제 방지는 updateStatuses와 동일. */
+  async removeMany(dto: BulkDeleteCampaignsDto) {
+    await this.prisma.$transaction(async (tx) => {
+      const found = await tx.campaign.count({ where: { id: { in: dto.ids } } });
+      if (found !== dto.ids.length) {
+        throw new NotFoundException(
+          `요청한 캠페인 ${dto.ids.length}건 중 ${found}건만 존재합니다. 목록을 새로고침해주세요.`,
+        );
+      }
+
+      await tx.campaign.deleteMany({ where: { id: { in: dto.ids } } });
+    });
   }
 }

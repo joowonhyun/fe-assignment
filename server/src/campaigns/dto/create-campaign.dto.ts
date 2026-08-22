@@ -1,8 +1,6 @@
 import { IsIn, IsInt, IsDateString, Length, Max, Min } from 'class-validator';
-import { CAMPAIGN_LIMITS } from '../campaign.constants';
-
-const PLATFORMS = ['Google', 'Naver', 'Meta'] as const;
-const STATUSES = ['active', 'paused', 'ended'] as const;
+import { CAMPAIGN_LIMITS, PLATFORMS, STATUSES } from '../campaign.constants';
+import type { Platform, Status } from '../campaign.constants';
 
 export class CreateCampaignDto {
   @Length(CAMPAIGN_LIMITS.NAME_MIN_LENGTH, CAMPAIGN_LIMITS.NAME_MAX_LENGTH, {
@@ -13,12 +11,12 @@ export class CreateCampaignDto {
   @IsIn(PLATFORMS, {
     message: `매체는 ${PLATFORMS.join(', ')} 중 하나여야 합니다.`,
   })
-  platform: (typeof PLATFORMS)[number];
+  platform: Platform;
 
   @IsIn(STATUSES, {
     message: `상태값은 ${STATUSES.join(', ')} 중 하나여야 합니다.`,
   })
-  status: (typeof STATUSES)[number];
+  status: Status;
 
   @IsInt({ message: '예산은 정수여야 합니다.' })
   @Min(CAMPAIGN_LIMITS.BUDGET_MIN, {
